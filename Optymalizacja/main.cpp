@@ -6,7 +6,7 @@ Autor: dr in¿. £ukasz Sztangret
 Katedra Informatyki Stosowanej i Modelowania
 Akademia Górniczo-Hutnicza
 *********************************************/
-//check
+//checking
 
 #include"opt_alg.h"
 #include"user_funs.h"
