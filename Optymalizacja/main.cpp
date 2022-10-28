@@ -36,9 +36,10 @@ int main()
 void lab1()
 {
 	double* p = new double[2];
-	p = expansion(&f_celu, -10, 1, 1.5, 1000, 0, 0);
+	p = expansion(&f_celu, 10, 1, 1.5, 1000, 0, 0);
+
+	//p = expansion(&f_celu, 100.0, 1.0, 2.0, 1000, 0, 0);
 	cout << p[0] << endl << p[1] << endl;
-	//p = exception(&f_celu, -100, 1, 1.5, 1000, 0, 0);
 }
 
 void lab2()
