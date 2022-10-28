@@ -1,56 +1,56 @@
 #include"opt_alg.h"
 double* expansion(matrix(*ff)(matrix, matrix, matrix), double x0, double d, double alpha, int Nmax, matrix ud1, matrix ud2)
 {
-	try
+	try // :((((
 	{
-		double* p = new double[2] { 0, 0 };
 		int i = 0;
+
 		solution X0(x0), X1(x0 + d);
-		X0.fit_fun(ff, ud1, ud2);
+		solution pom;
+		double* p = new double[2];
 		X1.fit_fun(ff, ud1, ud2);
-		if (X0.y == X1.y)
-		{
+		X0.fit_fun(ff, ud1, ud2);
+		//X1.fit_fun(ff,ud1,ud2) == X0.fit_fun(ff, ud1, ud2)
+		if (X1.y == X0.y) {
 			p[0] = m2d(X0.x);
 			p[1] = m2d(X1.x);
 			return p;
 		}
-		if (X0.y < X1.y)
-		{
-			//cout << "pen is black" << endl;
+
+		if (X1.y > X0.y) {
 			d = -d;
-			X1.x = X0.x + d;
+			X1.x = x0 + d;
 			X1.fit_fun(ff, ud1, ud2);
-			if (X1.y >= X0.y)
-			{
-				//cout << "pen is black" << endl;
+			if (X1.y >= X0.y) {
+				p[1] = m2d(X0.x - d);
 				p[0] = m2d(X1.x);
-				p[1] = m2d(X0.x) - d;
 				return p;
 			}
 		}
-		solution X2;
-		while (true)
-		{
-			i++;
-			X2.x = x0 + pow(alpha, i) * d;
-			//cout << X2.x << endl;
-			X2.fit_fun(ff, ud1, ud2);
-			//cout << X2.y << endl;
-			if (X1.y <= X2.y)
-			{
-				break;
-			}
+
+		for (;;) {
+
+			//cout << i << endl;
+			//if (i > Nmax) return -1;
+			//i++;
+			i++; // jak zrobisz jeszcze jedno i++ to wyjdzie to 156 xd
+			pom.x = x0 + pow(alpha, i) * d;
+			pom.fit_fun(ff, ud1, ud2);
+			//cout << X1.y << "\t" << pom.y << endl;
+			//cout << X1.x << "\t" << pom.x << endl;
+			if (X1.y <= pom.y) break;
 			X0 = X1;
-			X1 = X2;
+			X1 = pom;
+
 		}
+
 		if (d > 0) {
-			//cout << "pen is black" << endl;
 			p[0] = m2d(X0.x);
-			p[1] = m2d(X2.x);
+			p[1] = m2d(pom.x);
 			return p;
 		}
-		//cout << "pen is black" << endl;
-		p[0] = m2d(X2.x);
+
+		p[0] = m2d(pom.x);
 		p[1] = m2d(X0.x);
 		return p;
 	}
@@ -65,8 +65,33 @@ solution fib(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 	try
 	{
 		solution Xopt;
-		//Tu wpisz kod funkcji
-
+		Xopt.ud = b - a;
+		int n = static_cast<int>(ceil(log2(sqrt(5) * (b - a) / epsilon) / log2((1 + sqrt(5)) / 2)));
+		double* F = new double[n] {1, 1};
+		for (int i = 2; i < n; ++i)
+			F[i] = F[i - 2] + F[i - 1];
+		solution A(a), B(b), C, D;
+		C.x = B.x - 1.0 * F[n - 2] / F[n - 1] * (B.x - A.x);
+		D.x = A.x + B.x - C.x;
+		C.fit_fun(ff, ud1, ud2);
+		D.fit_fun(ff, ud1, ud2);
+		for (int i = 0; i <= n - 3; ++i)
+		{
+			if (C.y < D.y) {
+				//A = A;
+				B = D;
+			}
+			else {
+				//B = B;
+				A = C;
+			}
+			C.x = B.x - (F[n - i - 2] / F[n - i - 1]) * (B.x - A.x);
+			D.x = A.x + B.x - C.x;
+			C.fit_fun(ff, ud1, ud2);
+			D.fit_fun(ff, ud1, ud2);
+		}
+		Xopt = C;
+		Xopt.flag = 0;
 		return Xopt;
 	}
 	catch (string ex_info)
@@ -81,7 +106,73 @@ solution lag(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 	try
 	{
 		solution Xopt;
-		//Tu wpisz kod funkcji
+		Xopt.ud = b - a;
+		solution A(a), B(b), C, D, D_old(a);
+		C.x = (a + b) / 2;
+		A.fit_fun(ff, ud1, ud2);
+		B.fit_fun(ff, ud1, ud2);
+		C.fit_fun(ff, ud1, ud2);
+		double l, m;
+		while (true)
+		{
+			l = m2d(A.y * (pow(B.x) - pow(C.x)) + B.y * (pow(C.x) - pow(A.x)) + C.y * (pow(A.x) - pow(B.x)));
+			m = m2d(A.y * (B.x - C.x) + B.y * (C.x - A.x) + C.y * (A.x - B.x));
+			if (m <= 0)
+			{
+				Xopt = D_old;
+				Xopt.flag = 2;
+				return Xopt;
+			}
+			D.x = 0.5 * l / m;
+			D.fit_fun(ff, ud1, ud2);
+			if (A.x <= D.x && D.x <= C.x) // ??
+			{
+				if (D.y < C.y) {
+					//A = A;
+					C = D;
+					B = C;
+				}
+				else {
+					A = D;
+					//C = C;
+					//B = B;
+				}
+			}
+			else if (C.x <= D.x && D.x <= B.x) // ??
+			{
+				if (D.y < C.y) {
+					A = C;
+					C = D;
+					//B = B;
+				}
+				else {
+					//A = A;
+					//C = C;
+					B = D;
+				}
+			}
+			else
+			{
+				Xopt = D_old;
+				Xopt.flag = 2;
+				return Xopt;
+			}
+			Xopt.ud.add_row((B.x - A.x)());
+			if (B.x - A.x < epsilon || abs(D.x() - D_old.x()) < gamma)
+			{
+				Xopt = D;
+				Xopt.flag = 0;
+				break;
+			}
+			if (solution::f_calls > Nmax)
+			{
+				Xopt = D;
+				Xopt.flag = 1;
+				break;
+			}
+			D_old = D;
+		}
+		return Xopt;
 
 		return Xopt;
 	}
@@ -254,4 +345,3 @@ solution EA(matrix(*ff)(matrix, matrix, matrix), int N, matrix limits, int mi, i
 		throw ("solution EA(...):\n" + ex_info);
 	}
 }
-
