@@ -147,11 +147,7 @@
     <ClCompile Include="user_funs.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="matrix.h" />
-    <ClInclude Include="ode_solver.h" />
-    <ClInclude Include="opt_alg.h" />
-    <ClInclude Include="solution.h" />
-    <ClInclude Include="user_funs.h" />
+    <ClInclude Include="..\..\optymalizacja\optymalizacja\user_funs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

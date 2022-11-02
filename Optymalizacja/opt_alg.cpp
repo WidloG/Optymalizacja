@@ -10,7 +10,6 @@ double* expansion(matrix(*ff)(matrix, matrix, matrix), double x0, double d, doub
 		double* p = new double[2];
 		X1.fit_fun(ff, ud1, ud2);
 		X0.fit_fun(ff, ud1, ud2);
-		//X1.fit_fun(ff,ud1,ud2) == X0.fit_fun(ff, ud1, ud2)
 		if (X1.y == X0.y) {
 			p[0] = m2d(X0.x);
 			p[1] = m2d(X1.x);
@@ -30,14 +29,9 @@ double* expansion(matrix(*ff)(matrix, matrix, matrix), double x0, double d, doub
 
 		for (;;) {
 
-			//cout << i << endl;
-			//if (i > Nmax) return -1;
-			//i++;
-			i++; // jak zrobisz jeszcze jedno i++ to wyjdzie to 156 xd
+			i++;
 			pom.x = x0 + pow(alpha, i) * d;
 			pom.fit_fun(ff, ud1, ud2);
-			//cout << X1.y << "\t" << pom.y << endl;
-			//cout << X1.x << "\t" << pom.x << endl;
 			if (X1.y <= pom.y) break;
 			X0 = X1;
 			X1 = pom;
@@ -77,14 +71,8 @@ solution fib(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 		D.fit_fun(ff, ud1, ud2);
 		for (int i = 0; i <= n - 3; ++i)
 		{
-			if (C.y < D.y) {
-				//A = A;
-				B = D;
-			}
-			else {
-				//B = B;
-				A = C;
-			}
+			if (C.y < D.y) B = D;
+			else A = C;
 			C.x = B.x - (F[n - i - 2] / F[n - i - 1]) * (B.x - A.x);
 			D.x = A.x + B.x - C.x;
 			C.fit_fun(ff, ud1, ud2);
@@ -125,29 +113,23 @@ solution lag(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 			}
 			D.x = 0.5 * l / m;
 			D.fit_fun(ff, ud1, ud2);
-			if (A.x <= D.x && D.x <= C.x) // ??
+			if (A.x <= D.x && D.x <= C.x)
 			{
 				if (D.y < C.y) {
-					//A = A;
 					C = D;
 					B = C;
 				}
 				else {
 					A = D;
-					//C = C;
-					//B = B;
 				}
 			}
-			else if (C.x <= D.x && D.x <= B.x) // ??
+			else if (C.x <= D.x && D.x <= B.x)
 			{
 				if (D.y < C.y) {
 					A = C;
 					C = D;
-					//B = B;
 				}
 				else {
-					//A = A;
-					//C = C;
 					B = D;
 				}
 			}
