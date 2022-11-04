@@ -34,5 +34,8 @@
     <ClInclude Include="..\..\optymalizacja\optymalizacja\user_funs.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="matrix.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,12 +7,15 @@ double* expansion(matrix(*ff)(matrix, matrix, matrix), double x0, double d, doub
 
 		solution X0(x0), X1(x0 + d);
 		solution pom;
+		X0.clear_calls();
 		double* p = new double[2];
 		X1.fit_fun(ff, ud1, ud2);
 		X0.fit_fun(ff, ud1, ud2);
 		if (X1.y == X0.y) {
 			p[0] = m2d(X0.x);
 			p[1] = m2d(X1.x);
+			cout << endl << X1.f_calls << ",";
+			X1.clear_calls();
 			return p;
 		}
 
@@ -23,6 +26,8 @@ double* expansion(matrix(*ff)(matrix, matrix, matrix), double x0, double d, doub
 			if (X1.y >= X0.y) {
 				p[1] = m2d(X0.x - d);
 				p[0] = m2d(X1.x);
+				cout << endl << X1.f_calls << ",";
+				X1.clear_calls();
 				return p;
 			}
 		}
@@ -41,11 +46,15 @@ double* expansion(matrix(*ff)(matrix, matrix, matrix), double x0, double d, doub
 		if (d > 0) {
 			p[0] = m2d(X0.x);
 			p[1] = m2d(pom.x);
+			cout << endl << X1.f_calls << ",";
+			X1.clear_calls();
 			return p;
 		}
 
 		p[0] = m2d(pom.x);
 		p[1] = m2d(X0.x);
+		cout << endl << X1.f_calls << ",";
+		X1.clear_calls();
 		return p;
 	}
 	catch (string ex_info)
