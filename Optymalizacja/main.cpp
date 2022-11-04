@@ -36,7 +36,7 @@ int main()
 void lab1()
 {
 
-	double x0 = -32.268, d = 1.0, epsilon = 0.00001, gamma = 1e-200, Nmax = 1000;
+	double x0 = -17.2134, d = 1.1, epsilon = 0.00001, gamma = 1e-200, Nmax = 1000;
 
 	double* p = new double[2];
 	solution fibbobibo[100];
@@ -48,7 +48,7 @@ void lab1()
 	for (int i = 0; i < 100; i++)
 	{
 		//double x0 = rand() % 101 + 1;
-		p = expansion(&f_celu, x0, 1, 2.5, 1000, 0, 0);
+		p = expansion(&f_celu, x0, 1, 1.25, 1000, 0, 0);
 		cout << x0 << "," << p[0] << "," << p[1];
 		fibbobibo[i] =  fib(f_celu, p[0], p[1], epsilon, 0, 0);
 		laga[i] = lag(f_celu, p[0], p[1], epsilon, gamma, Nmax, 0, 0);
