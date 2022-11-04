@@ -35,9 +35,12 @@ int main()
 
 void lab1()
 {
+
 	double* p = new double[2];
 	solution fibbobibo[100];
 	solution laga[100];
+	matrix min1 = 1000;
+	matrix min2 = 1000;
 	srand(time(NULL));
 	for (int i = 0; i < 100; i++)
 	{
@@ -52,8 +55,11 @@ void lab1()
 	{
 		//cout << fibbobibo[i] << endl;
 		cout << fibbobibo[i].x << "," << fibbobibo[i].y << "," << fibbobibo[i].f_calls << "," << endl;
-	}
 
+		if (min1 > fibbobibo[i].y) min1 = fibbobibo[i].y;
+		cout << min1 << endl;
+
+	}
 	//p = expansion(&f_celu, 100.0, 1.0, 2.0, 1000, 0, 0);
 	//cout << p[0] << endl << p[1] << endl;
 
