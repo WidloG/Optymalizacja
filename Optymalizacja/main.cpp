@@ -46,17 +46,17 @@ void lab1()
 	matrix min2 = 1000;
 	srand(time(NULL));
 
-	for (int i = 0; i < 100; i++){
-		p = expansion(&f_celu, x0, 1, 1.25, 1000, 0, 0);
-		//cout << x0 << "," << p[0] << "," << p[1];
-		/*solution::clear_calls();
-		fibbobibo[i] =  fib(f_celu, p[0], p[1], epsilon, 0, 0);
-		cout << fibbobibo[i].f_calls << endl;*/
-		solution::clear_calls();
-		laga[i] = lag(f_celu, p[0], p[1], epsilon, gamma, Nmax, 0, 0);
-		cout << fibbobibo[i].f_calls << endl;
-		x0 += d;
-	}
+	//for (int i = 0; i < 100; i++){
+	//	p = expansion(&f_celu, x0, 1, 1.25, 1000, 0, 0);
+	//	//cout << x0 << "," << p[0] << "," << p[1];
+	//	/*solution::clear_calls();
+	//	fibbobibo[i] =  fib(f_celu, p[0], p[1], epsilon, 0, 0);
+	//	cout << fibbobibo[i].f_calls << endl;*/
+	//	solution::clear_calls();
+	//	laga[i] = lag(f_celu, p[0], p[1], epsilon, gamma, Nmax, 0, 0);
+	//	cout << fibbobibo[i].f_calls << endl;
+	//	x0 += d;
+	//}
 
 	//cout << "\n\nFIBONACCI\n\n" << endl;
 	//for (int i = 0; i < 100; i++){
@@ -72,9 +72,9 @@ void lab1()
 	//	cout << min2 << endl;
 	//}
 	//
-	//epsilon = 1e-10;
-	//opt = fib(fR, 1e-4, 1e-2, epsilon);
-	//cout << opt << endl << endl;
+	epsilon = 1e-10;
+	opt = fib(fR, 1e-4, 1e-2, epsilon);
+	//cout << opt << endl;
 	//opt = lag(fR, 1e-4, 1e-2, epsilon, gamma, Nmax);
 	//cout << opt << endl << endl;
 }

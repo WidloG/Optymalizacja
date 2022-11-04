@@ -7,6 +7,10 @@ matrix* solve_ode(matrix(*diff)(double, matrix, matrix, matrix), double t0, doub
 	try
 	{
 		int N = static_cast<int>(floor((tend - t0) / dt) + 1);
+		int tmp = 1;
+
+		ofstream zapisP("gowno10.txt");
+
 		if (N < 2)
 			throw string("matrix* solve_ode(...):\nprzedzial czasu nie jest zdefiniowany poprawnie");
 		int* s = get_size(Y0);
@@ -26,8 +30,14 @@ matrix* solve_ode(matrix(*diff)(double, matrix, matrix, matrix), double t0, doub
 			k2 = dt * diff(S[0](i - 1) + 0.5 * dt, S[1][i - 1] + 0.5 * k1, ud1, ud2);
 			k3 = dt * diff(S[0](i - 1) + 0.5 * dt, S[1][i - 1] + 0.5 * k2, ud1, ud2);
 			k4 = dt * diff(S[0](i - 1) + dt, S[1][i - 1] + k3, ud1, ud2);
-			for (int j = 0; j < n; ++j)
+			for (int j = 0; j < n; ++j){
 				S[1](j, i) = S[1](j, i - 1) + (k1(j) + 2 * k2(j) + 2 * k3(j) + k4(j)) / 6;
+				if (tmp < 3002) {
+					if (tmp % 3 == 0) zapisP << S[1](0, i) << "\t" << S[1](1, i) << "\t" << S[1](2, i) << "\n";
+					tmp++;
+					
+				}
+			}
 		}
 		S[1] = trans(S[1]);
 		return S;
