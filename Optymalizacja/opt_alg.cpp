@@ -1,10 +1,9 @@
 #include"opt_alg.h"
 double* expansion(matrix(*ff)(matrix, matrix, matrix), double x0, double d, double alpha, int Nmax, matrix ud1, matrix ud2)
 {
-	try // :((((
+	try
 	{
 		int i = 0;
-
 		solution X0(x0), X1(x0 + d);
 		solution pom;
 		X0.clear_calls();
@@ -57,8 +56,7 @@ double* expansion(matrix(*ff)(matrix, matrix, matrix), double x0, double d, doub
 		X1.clear_calls();
 		return p;
 	}
-	catch (string ex_info)
-	{
+	catch (string ex_info){
 		throw ("double* expansion(...):\n" + ex_info);
 	}
 }
@@ -78,8 +76,7 @@ solution fib(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 		D.x = A.x + B.x - C.x;
 		C.fit_fun(ff, ud1, ud2);
 		D.fit_fun(ff, ud1, ud2);
-		for (int i = 0; i <= n - 3; ++i)
-		{
+		for (int i = 0; i <= n - 3; ++i){
 			if (C.y < D.y) B = D;
 			else A = C;
 			C.x = B.x - (F[n - i - 2] / F[n - i - 1]) * (B.x - A.x);
@@ -91,11 +88,9 @@ solution fib(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 		Xopt.flag = 0;
 		return Xopt;
 	}
-	catch (string ex_info)
-	{
+	catch (string ex_info){
 		throw ("solution fib(...):\n" + ex_info);
 	}
-
 }
 
 solution lag(matrix(*ff)(matrix, matrix, matrix), double a, double b, double epsilon, double gamma, int Nmax, matrix ud1, matrix ud2)
@@ -110,20 +105,17 @@ solution lag(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 		B.fit_fun(ff, ud1, ud2);
 		C.fit_fun(ff, ud1, ud2);
 		double l, m;
-		while (true)
-		{
+		while (true){
 			l = m2d(A.y * (pow(B.x) - pow(C.x)) + B.y * (pow(C.x) - pow(A.x)) + C.y * (pow(A.x) - pow(B.x)));
 			m = m2d(A.y * (B.x - C.x) + B.y * (C.x - A.x) + C.y * (A.x - B.x));
-			if (m <= 0)
-			{
+			if (m <= 0){
 				Xopt = D_old;
 				Xopt.flag = 2;
 				return Xopt;
 			}
 			D.x = 0.5 * l / m;
 			D.fit_fun(ff, ud1, ud2);
-			if (A.x <= D.x && D.x <= C.x)
-			{
+			if (A.x <= D.x && D.x <= C.x){
 				if (D.y < C.y) {
 					C = D;
 					B = C;
@@ -149,14 +141,12 @@ solution lag(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 				return Xopt;
 			}
 			Xopt.ud.add_row((B.x - A.x)());
-			if (B.x - A.x < epsilon || abs(D.x() - D_old.x()) < gamma)
-			{
+			if (B.x - A.x < epsilon || abs(D.x() - D_old.x()) < gamma){
 				Xopt = D;
 				Xopt.flag = 0;
 				break;
 			}
-			if (solution::f_calls > Nmax)
-			{
+			if (solution::f_calls > Nmax){
 				Xopt = D;
 				Xopt.flag = 1;
 				break;
@@ -164,11 +154,8 @@ solution lag(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 			D_old = D;
 		}
 		return Xopt;
-
-		return Xopt;
 	}
-	catch (string ex_info)
-	{
+	catch (string ex_info){
 		throw ("solution lag(...):\n" + ex_info);
 	}
 }
