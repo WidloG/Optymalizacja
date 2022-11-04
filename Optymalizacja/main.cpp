@@ -36,7 +36,7 @@ int main()
 void lab1()
 {
 
-	double x0 = 69.69, d = 2.137, epsilon = 0.00001, gamma = 1e-40;
+	double x0 = 69.69, d = 2.137, epsilon = 0.00001, gamma = 1e-200;
 
 	double* p = new double[2];
 	solution fibbobibo[100];
@@ -51,10 +51,10 @@ void lab1()
 		p = expansion(&f_celu, x0, 1, 2.5, 1000, 0, 0);
 		cout << x0 << "," << p[0] << "," << p[1] << endl;
 		fibbobibo[i] =  fib(f_celu, p[0], p[1], epsilon, 0, 0);
-		laga[i] = lag(f_celu, p[0], p[1], epsilon, gamma, 0, 0);
+		laga[i] = lag(f_celu, p[0], p[1], epsilon, gamma, 1000, 0, 0);
 		x0 += d;
 	}
-	cout << "FIBBOBIBO" << endl;
+	cout << "\n\nFIBBOBIBO\n\n" << endl;
 	for (int i = 0; i < 100; i++)
 	{
 		//cout << fibbobibo[i] << endl;
@@ -62,6 +62,16 @@ void lab1()
 
 		if (min1 > fibbobibo[i].y) min1 = fibbobibo[i].y;
 		cout << min1 << endl;
+
+	}
+	cout << "\n\nLAGA MORDO\n\n" << endl;
+	for (int i = 0; i < 100; i++)
+	{
+		//cout << fibbobibo[i] << endl;
+		cout << laga[i].x << "," << laga[i].y << "," << laga[i].f_calls << "," << endl;
+
+		if (min2 > laga[i].y) min2 = laga[i].y;
+		cout << min2 << endl;
 
 	}
 	//p = expansion(&f_celu, 100.0, 1.0, 2.0, 1000, 0, 0);
