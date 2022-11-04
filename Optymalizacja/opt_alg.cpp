@@ -117,8 +117,8 @@ solution lag(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 			D.fit_fun(ff, ud1, ud2);
 			if (A.x <= D.x && D.x <= C.x){
 				if (D.y < C.y) {
-					C = D;
 					B = C;
+					C = D;					
 				}
 				else {
 					A = D;

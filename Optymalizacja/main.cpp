@@ -74,9 +74,9 @@ void lab1()
 	//
 	epsilon = 1e-10;
 	opt = fib(fR, 1e-4, 1e-2, epsilon);
-	//cout << opt << endl;
-	//opt = lag(fR, 1e-4, 1e-2, epsilon, gamma, Nmax);
-	//cout << opt << endl << endl;
+	cout << opt << endl;
+	opt = lag(fR, 1e-4, 1e-2, epsilon, gamma, Nmax);
+	cout << opt << endl << endl;
 }
 
 void lab2()
