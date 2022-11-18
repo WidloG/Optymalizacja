@@ -22,7 +22,8 @@ int main()
 {
 	try
 	{
-		lab1();
+		//lab1();
+		lab2();
 	}
 	catch (string EX_INFO)
 	{
@@ -81,7 +82,9 @@ void lab1()
 
 void lab2()
 {
-
+	matrix x0 = (0.5, .5);
+	solution wynik = HJ(f_celu2, x0, 0.5, 0.5, 0.001, 1000, 0, 0);
+	cout << wynik << endl;
 }
 
 void lab3()

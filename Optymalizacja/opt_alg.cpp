@@ -165,8 +165,38 @@ solution HJ(matrix(*ff)(matrix, matrix, matrix), matrix x0, double s, double alp
 	try
 	{
 		solution Xopt;
-		//Tu wpisz kod funkcji
-
+		solution XB(x0);
+		solution X0;
+		solution XB2 = XB;
+		do
+		{
+			//XB = X0;
+			X0 = HJ_trial(ff, XB, s, ud1, ud2);
+			//XB.fit_fun(ff, ud1, ud2);
+			//X0.fit_fun(ff, ud1, ud2);
+			if (X0.y < XB.y)
+			{
+				do {
+					XB2 = XB;
+					XB = X0;
+					X0.x = 2 * XB.x - XB2.x;
+					X0 = HJ_trial(ff, X0, s);
+					if (X0.f_calls > Nmax) {
+						return 0;
+					}
+					//X0.fit_fun(ff, ud1, ud2);
+					//XB.fit_fun(ff, ud1, ud2);
+				} while (X0.y > XB.y);
+				X0 = XB;
+			}
+			else {
+				s = alpha * s;
+			}
+			if (X0.f_calls > Nmax) {
+				return 0;
+			}
+		} while (s > epsilon);
+		Xopt = XB;
 		return Xopt;
 	}
 	catch (string ex_info)
@@ -179,8 +209,23 @@ solution HJ_trial(matrix(*ff)(matrix, matrix, matrix), solution XB, double s, ma
 {
 	try
 	{
-		//Tu wpisz kod funkcji
-
+		//matrix e[2] = { (1,0),(0,1) };
+		matrix e = ident_mat(2);
+		solution XB2;
+		solution XB3;
+		for (int i = 0; i < 2; i++)
+		{
+			XB2 = XB.x + (s * e[i]);
+			XB3 = XB.x - (s * e[i]);
+			XB2.fit_fun(ff, ud1, ud2);
+			XB3.fit_fun(ff, ud1, ud2);
+			if (XB2.y < XB.y) {
+				XB = XB2;
+			}
+			else if (XB3.y < XB.y) {
+				XB = XB3;
+			}
+		}
 		return XB;
 	}
 	catch (string ex_info)

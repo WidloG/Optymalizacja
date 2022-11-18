@@ -7,6 +7,11 @@ matrix f_celu(matrix x, matrix ud1, matrix ud2) {
 	return -cos(0.1 * x()) * exp(-pow(0.1 * x() - 2 * M_PI, 2)) + 0.002 * pow(0.1 * x(), 2);
 }
 
+matrix f_celu2(matrix x, matrix ud1, matrix ud2) {
+	return pow(x(0), 2) + pow(x(1), 2) - cos(2.5 * M_PI * x(0)) - cos(2.5 * M_PI * x(1)) + 2;
+	//return 2.5 * pow(pow(x(0, 0), 2) - x(0, 1), 2) + pow(1 - x(0, 0), 2);
+}
+
 matrix df1(double t, matrix Y, matrix ud1, matrix ud2) {
 	double a = 0.98, b = 0.63, g = 9.81;
 	double Fin = .01, Faout, Fbout;
