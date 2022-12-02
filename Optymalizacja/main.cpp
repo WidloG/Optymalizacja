@@ -80,11 +80,14 @@ void lab1()
 	cout << opt << endl << endl;
 }
 
-void lab2()
-{
-	matrix x0 = (0.5, .5);
-	solution wynik = HJ(f_celu2, x0, 0.5, 0.5, 0.001, 1000, 0, 0);
-	cout << wynik << endl;
+void lab2(){
+
+	solution hj[100];
+	matrix x0 = matrix(2, 1, 0.75);
+	//solution wynik = HJ(f_celu2, x0, 0.5, 0.5, 0.001, 1000, 0, 0);
+	//cout << wynik << endl;
+	HJ(f_celu2, x0, 0.5, 0.5, 0.001, 1000, 0, 0);
+
 }
 
 void lab3()
