@@ -9,7 +9,14 @@ matrix f_celu(matrix x, matrix ud1, matrix ud2) {
 
 matrix f_celu2(matrix x, matrix ud1, matrix ud2) {
 	return pow(x(0), 2) + pow(x(1), 2) - cos(2.5 * M_PI * x(0)) - cos(2.5 * M_PI * x(1)) + 2;
-	//return 2.5 * pow(pow(x(0, 0), 2) - x(0, 1), 2) + pow(1 - x(0, 0), 2);
+}
+
+matrix f_celu3_test(matrix x, matrix ud1, matrix ud2) {
+	return pow((x(0)-2),2) + pow((x(1) - 3), 2);
+}
+
+matrix f_celu3(matrix x, matrix ud1, matrix ud2) {
+	return (sin(M_PI * sqrt(pow(x(0) / M_PI, 2) + pow(x(1) / M_PI, 2))) / (M_PI * sqrt(pow(x(0) / M_PI, 2) + pow(x(1) / M_PI, 2))));
 }
 
 matrix df1(double t, matrix Y, matrix ud1, matrix ud2) {
