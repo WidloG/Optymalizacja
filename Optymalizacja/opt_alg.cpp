@@ -171,7 +171,7 @@ solution HJ(matrix(*ff)(matrix, matrix, matrix), matrix x0, double s, double  al
 		XB.fit_fun(ff, ud1, ud2);
 		while (true){
 			X = HJ_trial(ff, XB, s, ud1, ud2);
-			cout << X.x(0) << " " << X.x(1) << endl;
+			//cout << X.x(0) << " " << X.x(1) << endl;
 			if (X.y < XB.y){
 				while (true){
 					XB2 = XB;
@@ -223,10 +223,66 @@ solution Rosen(matrix(*ff)(matrix, matrix, matrix), matrix x0, matrix s0, double
 {
 	try
 	{
-		solution Xopt;
-		//Tu wpisz kod funkcji
-
-		return Xopt;
+		solution X(x0), Xt;
+		int n = get_dim(X);//liczba wymiarów
+		matrix l(n, 1),//odleg³oœ od orginalnego punktu 
+			p(n, 1),//pora¿ki w kierunu
+			s(s0),//d³ugoœci kroku
+			D = ident_mat(n);
+		X.fit_fun(ff, ud1, ud2);
+		while (true)
+		{
+			for (int i = 0; i < n; ++i)
+			{
+				Xt.x = X.x + s(i) * D[i];
+				Xt.fit_fun(ff, ud1, ud2);
+				if (Xt.y < X.y)
+				{
+					X = Xt;
+					l(i) += s(i);
+					s(i) *= alpha;
+				}
+				else
+				{
+					++p(i);
+					s(i) *= -beta;
+				}
+			}
+			bool change = true;
+			for (int i = 0; i < n; ++i)
+				if (p(i) == 0 || l(i) == 0)
+				{
+					change = false;
+					break;
+				}
+			if (change)
+			{
+				matrix Q(n, n), v(n, 1);
+				for (int i = 0; i < n; ++i)
+					for (int j = 0; j <= i; ++j)
+						Q(i, j) = l(i);
+				Q = D * Q;
+				v = Q[0] / norm(Q[0]);
+				D.set_col(v, 0);
+				for (int i = 1; i < n; ++i)
+				{
+					matrix temp(n, 1);
+					for (int j = 0; j < i; ++j)
+						temp = temp + trans(Q[i]) * D[j] * D[j];
+					v = (Q[i] - temp) / norm(Q[i] - temp);
+					D.set_col(v, i);
+				}
+				s = s0;
+				l = matrix(n, 1);
+				p = matrix(n, 1);
+			}
+			double max_s = abs(s(0));
+			for (int i = 1; i < n; ++i)
+				if (max_s < abs(s(i)))
+					max_s = abs(s(i));
+			if (max_s<epsilon || solution::f_calls>Nmax)
+				return X;
+		}
 	}
 	catch (string ex_info)
 	{

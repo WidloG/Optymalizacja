@@ -80,14 +80,49 @@ void lab1()
 	cout << opt << endl << endl;
 }
 
-void lab2(){
+//void lab2(){
+//
+//	solution hj[100];
+//	matrix x0 = matrix(2, 1, 0.75);
+//	//solution wynik = HJ(f_celu2, x0, 0.5, 0.5, 0.001, 1000, 0, 0);
+//	//cout << wynik << endl;
+//	HJ(f_celu2, x0, 0.5, 0.5, 0.001, 1000, 0, 0);
+//
+//}
 
-	solution hj[100];
-	matrix x0 = matrix(2, 1, 0.75);
-	//solution wynik = HJ(f_celu2, x0, 0.5, 0.5, 0.001, 1000, 0, 0);
-	//cout << wynik << endl;
-	HJ(f_celu2, x0, 0.5, 0.5, 0.001, 1000, 0, 0);
+void lab2()
+{
+	ofstream zapis("Dane.txt");
+	//Funkcja testowa
+	double s = 3.77, alphaHJ = 0.5, alphaR = 2, beta = 0.5, epsilon = 1e-3;
+	int Nmax = 1000;
+	solution opt;
+	matrix x0, s0;
+	s0 = matrix(2, 1, s);
 
+	cout << x0 << endl << endl;
+	int i = 100;
+	while (i > 0) {
+		x0 = 2 * rand_mat(2, 1) - 1;
+		/*opt = HJ(ff2T, x0, s, alphaHJ, epsilon, Nmax);
+		zapis << x0(0) << ";" << x0(1) << ";" << opt.x(0) << ";" << opt.x(1) << ";" << opt.y << ";" << opt.f_calls << endl;
+		solution::clear_calls();*/
+		opt = Rosen(ff2T, x0, s0, alphaR, beta, epsilon, Nmax);
+		zapis << opt.x(0) << "\t" << opt.x(1) << "\t" << opt.y << "\t" << opt.f_calls << endl;
+		solution::clear_calls();
+		i--;
+	}
+
+	//Ramie robota
+	//s = 0.75;
+	//x0 = 10 * rand_mat(2, 1);
+	//cout << x0 << endl << endl;
+	///*opt = HJ(ff2R, x0, s, alphaHJ, epsilon, Nmax);
+	//cout << opt << endl << endl;
+	//solution::clear_calls();*/
+	//opt = Rosen(ff2R, x0, s0, alphaR, beta, epsilon, Nmax);
+	//cout << opt << endl << endl;
+	//solution::clear_calls();
 }
 
 void lab3()
