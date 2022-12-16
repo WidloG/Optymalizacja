@@ -12,3 +12,13 @@ matrix fR(matrix x, matrix ud1, matrix ud2);
 matrix ff2T(matrix x, matrix ud1, matrix ud2);
 matrix ff2R(matrix x, matrix ud1, matrix ud2);
 matrix df2(double t, matrix Y, matrix ud1, matrix ud2);
+
+matrix ff3T(matrix x, matrix ud1, matrix ud2);
+matrix df3(double t, matrix Y, matrix ud1, matrix ud2);
+matrix ff3R(matrix x, matrix ud1, matrix ud2);
+
+matrix ff4T(matrix x, matrix ud1, matrix ud2);
+matrix gf4T(matrix x, matrix ud1, matrix ud2);
+matrix Hf4T(matrix x, matrix ud1, matrix ud2);
+matrix ff4R(matrix x, matrix ud1, matrix ud2);
+matrix gf4R(matrix x, matrix ud1, matrix ud2);

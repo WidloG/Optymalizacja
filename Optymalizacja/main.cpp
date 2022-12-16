@@ -23,7 +23,7 @@ int main()
 	try
 	{
 		//lab1();
-		lab2();
+		lab4();
 	}
 	catch (string EX_INFO)
 	{
@@ -127,12 +127,99 @@ void lab2()
 
 void lab3()
 {
+	ofstream zapis("Dane.txt");
+	//zapis << "\n\nProblem testowy\n\n";
+	matrix x0, a(4.4934);
+	double c_ex = 1, c_in = 10, dc_ex = 2, dc_in = 0.5, epsilon = 1e-4;
+	int Nmax = 10000;
+	solution opt;
+	int i = 100;
+	while (i > 0) {
+		do
+			x0 = 5 * rand_mat(2, 1) + 1;
+		while (norm(x0) > a);
+		opt = pen(ff3T, x0, c_ex, dc_ex, epsilon, Nmax, a);
+		zapis << x0(0) << "\t" << x0(1) << "\t" << opt.x(0) << "\t" << opt.x(1) << "\t" << norm(opt.x) << "\t" << opt.y << "\t" << opt.f_calls;
+		solution::clear_calls();
+		opt = pen(ff3T, x0, c_in, dc_in, epsilon, Nmax, a);
+		zapis << "\t" << opt.x(0) << "\t" << opt.x(1) << "\t" << norm(opt.x) << "\t" << opt.y << "\t" << opt.f_calls << endl;
+		solution::clear_calls();
+		i--;
+	}
+	//zapis << "//////////////\tProblem rzeczywisty\t///////////////\n";
 
+
+	x0 = matrix(2, 1);
+	x0(0) = 0;// 20 * m2d(rand_mat()) - 10;
+	x0(1) = 0;// 40 * m2d(rand_mat()) - 20;
+	cout << "x0:\n" << x0 << endl << endl;
+	opt = pen(ff3R, x0, c_ex, dc_ex, epsilon, Nmax);
+	opt.y = -opt.y;
+	cout << opt << endl;
+	solution::clear_calls();
 }
 
 void lab4()
 {
+	//Funkcja testowa
+	ofstream S;
+	S.open("wyniki.txt");
+	double epsilon = 1e-3, h = .12;
+	cout << h << endl << endl;
+	int Nmax = 5000;
+	matrix x0;
+	solution opt;
+	//x0 = 20 * rand_mat(2, 1) - 10;
+	//x0(0) = -6.95284;
+	//x0(1) = 9.72172;
+	//cout << x0(0)<< " " <<x0(1) << endl << endl;
+	///*opt = SD(ff4T, gf4T, x0, h, epsilon, Nmax);
+	//cout << opt << endl << endl;*/
+	///*solution::clear_calls();
+	//opt = CG(ff4T, gf4T, x0, h, epsilon, Nmax);
+	//cout << opt << endl << endl;
+	//solution::clear_calls();*/
+	//opt = Newton(ff4T, gf4T, Hf4T, x0, h, epsilon, Nmax);
+	//cout << opt << endl << endl;
+	//solution::clear_calls();
 
+	for (int i = 0; i < 100; i++) {
+		x0 = 20 * rand_mat(2, 1) - 10;
+		cout << x0 << endl << endl;
+		opt = SD(ff4T, gf4T, x0, h, epsilon, Nmax);
+		S << x0(0) << " " << x0(1) << " " << opt.x(0) << " " << opt.x(1) << " " << opt.y << " " << opt.f_calls << " " << opt.g_calls << " ";
+		solution::clear_calls();
+		opt = CG(ff4T, gf4T, x0, h, epsilon, Nmax);
+		S << opt.x(0) << " " << opt.x(1) << " " << opt.y << " " << opt.f_calls << " " << opt.g_calls << " ";
+		solution::clear_calls();
+		opt = Newton(ff4T, gf4T, Hf4T, x0, h, epsilon, Nmax);
+		S << opt.x(0) << " " << opt.x(1) << " " << opt.y << " " << opt.f_calls << " " << opt.g_calls << " " << opt.H_calls << "\n";
+		solution::clear_calls();
+	}
+
+	////Regresja liniowa
+	/*epsilon = 1e-5, h = 0.00001;
+	Nmax = 20000;
+	x0 = matrix(3, 1);
+	opt = CG(ff4R, gf4R, x0, h, epsilon, Nmax);
+	cout << opt << endl << endl;
+
+	int n = 3, m = 100, P = 0;
+	matrix X(n, m), Y(1, m);
+	ifstream Sin("XData.txt");
+	Sin >> X;
+	Sin.close();
+	Sin.open("YData.txt");
+	Sin >> Y;
+	Sin.close();
+	for (int i = 0; i < m; ++i)
+	{
+		h = (trans(opt.x) * X[i])();
+		h = 1.0 / (1.0 + exp(-h));
+		if (round(h) == Y(0, i))
+			++P;
+	}
+	cout << P << endl << endl;*/
 }
 
 void lab5()
