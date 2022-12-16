@@ -88,3 +88,77 @@ matrix df2(double t, matrix Y, matrix ud1, matrix ud2)
 
 	return dY;
 }
+
+matrix ff3T(matrix x, matrix ud1, matrix ud2) {
+	matrix y;
+	y = (sin(3.14 * sqrt(pow((x(0) / 3.14), 2) + pow((x(1) / 3.14), 2)))) / (3.14 * sqrt(pow((x(0) / 3.14), 2) + pow((x(1) / 3.14), 2)));
+	return y;
+}
+
+matrix ff3R(matrix x, matrix ud1, matrix ud2) {
+	/*matrix y;
+	matrix Y0(4, new double[4] { 0, x(0), 100, 0 });
+	matrix* Y = solve_ode(df3, 0, 0.01, 7, Y0, ud1, x(1));
+	int n = get_len(Y[0]);
+	int i50 = 0, i0 = 0;
+	for (int i = 0; i < n; ++i) {
+		if (abs(Y[1](i, 2) - 50) < abs(Y[1](i50, 2) - 50)) i50 = i;
+		if (abs(Y[1](i, 2)) < abs(Y[1](i0, 2)))  i0 = i;
+	}
+	y = -Y[1](i0, 0);
+	if (abs(x(0)) - 10 > 0) y = y + ud2 * pow(abs(x(0)) - 10, 2);
+	if (abs(x(1)) - 30 > 0) y = y + ud2 * pow(abs(x(1)) - 30, 2);
+	if (abs(Y[1](i50, 0) - 5) - 1 > 0) y = y + ud2 * pow(abs(Y[1](i50, 0) - 5) - 1, 2);
+	cout << Y[1](i50, 0) << "\t" << Y[1](i50, 1) << endl;
+	return y;*/
+
+	matrix y;
+	matrix y0(4, new double[4] { 0, x(0), 100, 0 });
+	matrix* Y = solve_ode(df3, 0, 0.01, 7, y0, ud1, x(1));
+	int n = get_len(Y[0]);
+	int i50 = 0, i0 = 0;
+	for (int i = 0; i < n; ++i)
+	{
+		if (abs(Y[1](i, 2) - 50) < abs(Y[1](i50, 2) - 50))
+			i50 = i;
+		if (abs(Y[1](i, 2)) < abs(Y[1](i0, 2)))
+			i0 = i;
+	}
+	y = -Y[1](i0, 0);
+	if (abs(x(0)) - 10 > 0)
+		y = y + ud2 * pow(abs(x(0)) - 10, 2);
+	if (abs(x(1)) - 25 > 0)
+		y = y + ud2 * pow(abs(x(1)) - 25, 2);
+	if (abs(Y[1](i50, 0) - 5) - 1 > 0)
+		y = y + ud2 * pow(abs(Y[1](i50, 0) - 5) - 1, 2);
+	return y;
+}
+
+matrix df3(double t, matrix Y, matrix ud1, matrix ud2) {
+	/*double C = 0.47, r = 0.12, m = 0.6, ro = 1.2, g = 9.81;
+	double S = 3.14 * r * r,
+		Dx = 0.5 * C * ro * S * Y(1) * abs(Y(1)),
+		Dy = 0.5 * C * ro * S * Y(3) * abs(Y(3)),
+		FMx = 3.14 * ro * Y(3) * m2d(ud2) * pow(r, 3),
+		FMy = 3.14 * ro * Y(1) * m2d(ud2) * pow(r, 3);
+	matrix dY(4, 1);
+	dY(0) = Y(1);
+	dY(1) = (-Dx - FMx) / m;
+	dY(2) = Y(3);
+	dY(3) = (-m * g - Dy - FMy) / m;
+	return dY;*/
+	double c = 0.47, r = 0.12, m = 0.6, r0 = 1.2, g = 9.81;
+	double s = M_PI * r * r;
+	double Dx = 0.5 * c * r0 * s * abs(Y(1)) * (Y(1));
+	double Dy = 0.5 * c * r0 * s * abs(Y(3)) * (Y(3));
+	double Fmx = M_PI * r0 * Y(3) * m2d(ud2) * pow(r, 3);
+	double Fmy = M_PI * r0 * Y(1) * m2d(ud2) * pow(r, 3);
+
+	matrix dy(4, 1);
+	dy(0) = Y(1);
+	dy(1) = (-Dy - Fmx) / m;
+	dy(2) = Y(3);
+	dy(3) = (-m * g - Dy - Fmy) / m;
+
+	return dy;
+}

@@ -23,7 +23,7 @@ int main()
 	try
 	{
 		//lab1();
-		lab2();
+		lab3();
 	}
 	catch (string EX_INFO)
 	{
@@ -127,7 +127,36 @@ void lab2()
 
 void lab3()
 {
+	ofstream zapis("Dane.txt");
+	//zapis << "\n\nProblem testowy\n\n";
+	matrix x0, a(4.4934);
+	double c_ex = 1, c_in = 10, dc_ex = 2, dc_in = 0.5, epsilon = 1e-4;
+	int Nmax = 10000;
+	solution opt;
+	int i = 100;
+	while (i > 0) {
+		do
+			x0 = 5 * rand_mat(2, 1) + 1;
+		while (norm(x0) > a);
+		opt = pen(ff3T, x0, c_ex, dc_ex, epsilon, Nmax, a);
+		zapis << x0(0) << "\t" << x0(1) << "\t" << opt.x(0) << "\t" << opt.x(1) << "\t" << norm(opt.x) << "\t" << opt.y << "\t" << opt.f_calls;
+		solution::clear_calls();
+		opt = pen(ff3T, x0, c_in, dc_in, epsilon, Nmax, a);
+		zapis << "\t" << opt.x(0) << "\t" << opt.x(1) << "\t" << norm(opt.x) << "\t" << opt.y << "\t" << opt.f_calls << endl;
+		solution::clear_calls();
+		i--;
+	}
+	//zapis << "//////////////\tProblem rzeczywisty\t///////////////\n";
 
+
+	x0 = matrix(2, 1);
+	x0(0) = 0;// 20 * m2d(rand_mat()) - 10;
+	x0(1) = 0;// 40 * m2d(rand_mat()) - 20;
+	cout << "x0:\n" << x0 << endl << endl;
+	opt = pen(ff3R, x0, c_ex, dc_ex, epsilon, Nmax);
+	opt.y = -opt.y;
+	cout << opt << endl;
+	solution::clear_calls();
 }
 
 void lab4()

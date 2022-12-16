@@ -289,12 +289,35 @@ solution Rosen(matrix(*ff)(matrix, matrix, matrix), matrix x0, matrix s0, double
 		throw ("solution Rosen(...):\n" + ex_info);
 	}
 }
-
 solution pen(matrix(*ff)(matrix, matrix, matrix), matrix x0, double c, double dc, double epsilon, int Nmax, matrix ud1, matrix ud2)
 {
 	try {
 		solution Xopt;
-		//Tu wpisz kod funkcji
+		double alpha = 1;
+		double beta = 0.5;
+		double gamma = 2;
+		double delta = 0.5;
+		double s = 0.5;
+
+		solution X(x0), X1;
+		while (true)
+		{
+			X1 = sym_NM(ff, X.x, s, alpha, beta, gamma, delta, epsilon, Nmax, ud1, c);
+			if (norm(X.x - X1.x) < epsilon)
+			{
+				Xopt = X1;
+				Xopt.flag = 0;
+				break;
+			}
+			if (solution::f_calls > Nmax)
+			{
+				Xopt = X1;
+				Xopt.flag = 1;
+				break;
+			}
+			c *= dc;
+			X = X1;
+		}
 
 		return Xopt;
 	}
@@ -303,20 +326,136 @@ solution pen(matrix(*ff)(matrix, matrix, matrix), matrix x0, double c, double dc
 		throw ("solution pen(...):\n" + ex_info);
 	}
 }
+//solution pen(matrix(*ff)(matrix, matrix, matrix), matrix x0, double c0, double dc, double epsilon, int Nmax, matrix ud1, matrix ud2)
+//{
+//	try {
+//		solution Xopt(x0);
+//		double alpha = 1, beta = 0.5, gamma = 2, delta = 0.5, s = 0.5;
+//		solution X(x0), X1;
+//		matrix c(2, new double[2] { c0, dc });
+//		X = sym_NM(ff, X.x, s, alpha, beta, gamma, delta, epsilon, Nmax, ud1, c);
+//		while (true)
+//		{
+//			X1 = sym_NM(ff, X.x, s, alpha, beta, gamma, delta, epsilon, Nmax, ud1, c);
+//			cout << "";
+//			matrix tmp = X1.y - X.y;
+//			//cout << "\n\ntmp\t" << tmp << endl;
+//			if ((tmp) < epsilon)
+//			{
+//				Xopt = X1;
+//				return X1;
+//			}
+//			//? ? ?
+//			X = X1;
+//		}
+//		return Xopt;
+//	}
+//	catch (string ex_info)
+//	{
+//		throw ("solution pen(...):\n" + ex_info);
+//	}
+//}
+
+//solution sym_NM(matrix(*ff)(matrix, matrix, matrix), matrix x0, double s, double alpha, double beta, double gamma, double delta, double epsilon, int Nmax, matrix ud1, matrix ud2)
+//{
+//	try
+//	{
+//		solution Xopt;
+//		//Tu wpisz kod funkcji
+//
+//		return Xopt;
+//	}
+//	catch (string ex_info)
+//	{
+//		throw ("solution sym_NM(...):\n" + ex_info);
+//	}
+//}
 
 solution sym_NM(matrix(*ff)(matrix, matrix, matrix), matrix x0, double s, double alpha, double beta, double gamma, double delta, double epsilon, int Nmax, matrix ud1, matrix ud2)
 {
-	try
+	solution Xopt;
+	int n = get_len(x0);
+	int N = n;//+1;
+	matrix D = ident_mat(n);
+	int ii = 0;
+	solution* S = new solution[N];
+	S[0].x = x0;
+	S[0].fit_fun(ff, ud1, ud2);
+	for (int i = 1; i < N; ++i)
 	{
-		solution Xopt;
-		//Tu wpisz kod funkcji
+		S[i].x = x0 + s * D[i];
+		S[i].fit_fun(ff, ud1, ud2);
+	}
+	solution PR, PE, PN;
+	matrix pc;
+	int i_min, i_max;
+	while (true)
+	{
+		ii++;
+		i_min = 0;
+		i_max = 0;
+		for (int i = 1; i < N; i++)
+		{
+			if (S[i].y < S[i - 1].y)
+				i_min = i;
+			if (S[i].y > S[i - 1].y)
+				i_max = i;
+		}
+		if (S[i_min].y == S[i_max].y)return -1;
+		pc = matrix(n, 1);
+		for (int i = 0; i < N; i++)
+			if (i != i_max)
+				//? ? ?
+				pc = pc + S[i].x / n;
+		PR.x = pc + alpha * (pc = S[i_max].x);
+		PR.fit_fun(ff, ud1, ud2);
+		if (PR.y >= S[i_min].y)
+			S[i_max] = PR;
 
-		return Xopt;
+		else if (PR.y < S[i_min].y)
+		{
+			PE.x = pc + gamma * (PR.x - pc);
+			PE.fit_fun(ff, ud1, ud2);
+			if (PE.y < PR.y)
+
+				S[i_max] = PE;
+			else
+				S[i_max] = PR;
+		}
+		else
+		{
+			if (S[i_min].y <= PR.y && PR.y < S[i_max].y)
+				S[i_max] = PR;
+			else {
+				PN.x = pc + beta * (S[i_max].x - pc);
+				PN.fit_fun(ff, ud1, ud2);
+				if (PN.y < S[i_max].y)
+					S[i_max] = PN;
+				else
+				{
+					for (int i = 0; i < N; ++i)
+						if (i != i_min)
+						{
+							S[i].x = delta * (S[i].x + S[i_min].x);
+							S[i].fit_fun(ff, ud1, ud2);
+						}
+				}
+			}
+		}
+		solution max_s = S[0];
+		Xopt = max_s;
+		for (int i = 1; i < N; ++i) {
+			if (max_s.y < S[i].y) max_s = S[i];
+			if (max_s.y > S[i].y) Xopt = S[i];
+			double tmp;
+
+			tmp = m2d(S[i_min].y) - m2d(S[i].y);
+			if (abs(tmp) < epsilon) break;
+		}
+		if (ii >= n)break;
 	}
-	catch (string ex_info)
-	{
-		throw ("solution sym_NM(...):\n" + ex_info);
-	}
+	return Xopt;
+
 }
 
 solution SD(matrix(*ff)(matrix, matrix, matrix), matrix(*gf)(matrix, matrix, matrix), matrix x0, double h0, double epsilon, int Nmax, matrix ud1, matrix ud2)
