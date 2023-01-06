@@ -164,7 +164,7 @@ void lab4()
 	//Funkcja testowa
 	ofstream S;
 	S.open("wyniki.txt");
-	double epsilon = 1e-3, h = .05;
+	double epsilon = 1e-3, h = -1;
 	cout << h << endl << endl;
 	int Nmax = 5000;
 	matrix x0;
