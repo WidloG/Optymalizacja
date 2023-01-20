@@ -25,3 +25,7 @@ matrix gf4R(matrix x, matrix ud1, matrix ud2);
 
 matrix ff5T(matrix x, matrix ud1, matrix ud2);
 matrix ff5R(matrix x, matrix ud1, matrix ud2);
+
+matrix ff6T(matrix x, matrix ud1 = NAN, matrix ud2 = NAN);
+matrix ff6R(matrix x, matrix ud1 = NAN, matrix ud2 = NAN);
+matrix df6(double t, matrix Y, matrix ud1 = NAN, matrix ud2 = NAN);

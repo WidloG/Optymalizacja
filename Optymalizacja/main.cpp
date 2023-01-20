@@ -22,7 +22,7 @@ int main()
 {
 	try
 	{
-		lab5();
+		lab6();
 	}
 	catch (string EX_INFO)
 	{
@@ -295,5 +295,31 @@ void lab5()
 
 void lab6()
 {
+	//Funkcja testowa
+	double epsilon = 1e-2;
+	int Nmax = 10000;
+	matrix limits(2, 2), sigma0(2, 1, 0.01);
+	solution opt;
+	//limits(0, 0) = limits(1, 0) = -5;
+	//limits(0, 1) = limits(1, 1) = 5;
+	
+	/*for(int i=0;i<100;i++){
+		opt = EA(ff6T, 2, limits, 20, 40, sigma0, epsilon, Nmax);
+		cout << opt.x(0) << " " << opt.x(1) << " " << opt.y() << " " << solution::f_calls << " " << ((sqrt(pow(opt.x(0),2)+ pow(opt.x(1), 2)) < epsilon) ? "TAK" : "NIE") << endl;
+		solution::clear_calls();
+	}*/
 
+	//Identyfikacja
+
+
+	Nmax = 5000;
+	epsilon = 1e-3;
+	limits = matrix(2, 2);
+	limits(0, 0) = limits(1, 0) = 0.1;
+	limits(0, 1) = limits(1, 1) = 3;
+	opt = EA(ff6R, 2, limits, 20, 40, matrix(2, 1, 1), epsilon, Nmax);
+	cout << opt << endl << endl;
+
+	//Symulacja
+	ff6R(opt.x, matrix());
 }
