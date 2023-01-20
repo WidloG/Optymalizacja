@@ -227,6 +227,7 @@ void lab5()
 	ofstream a1("1.txt");
 	ofstream a10("10.txt");
 	ofstream a100("100.txt");
+	ofstream belka("belka.txt");
 
 	double pom = 0;
 	matrix x0(2, 1), ud(2, 1);
@@ -238,7 +239,7 @@ void lab5()
 	ud(0) = 0;
 	ud(1) = a;
 	
-	/*for (size_t i = 0; i < 101; i++)
+	for (size_t i = 0; i < 101; i++)
 	{
 		ud(1) = 1;
 		ud(0) = pom;
@@ -260,7 +261,7 @@ void lab5()
 
 
 		pom += .01;
-	}*/
+	}
 	/*x0 = 20 * rand_mat(2, 1) - 10;
 	cout << x0 << endl << endl;
 	opt = Powell(ff5T, x0, epsilon, Nmax, ud);
@@ -282,10 +283,10 @@ void lab5()
 	{
 		x0(0) = 800 * m2d(rand_mat()) + 200; // 100 - 1000
 		x0(1) = 40 * m2d(rand_mat()) + 10; // 10 - 50
-		cout << x0(0) << "\t" << x0(1);// << endl;
+		belka << x0(0) << "\t" << x0(1);// << endl;
 		ud = matrix(1, 1, w); // w, a
 		opt = Powell(ff5R, x0, epsilon, Nmax, ud);
-		cout << "\t" << opt.x(0)*1000 << "\t" << opt.x(1)*1000 << "\t" << opt.y(0) << "\t" << opt.y(1)*1000 << "\t" << opt.f_calls << endl;
+		belka << "\t" << opt.x(0)*1000 << "\t" << opt.x(1)*1000 << "\t" << opt.y(0) << "\t" << opt.y(1)*1000 << "\t" << opt.f_calls << endl;
 		solution::clear_calls();
 		w += .01;
 
